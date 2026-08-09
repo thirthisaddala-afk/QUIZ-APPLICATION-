@@ -38,4 +38,4 @@ Open `index.html` in a web browser and start the quiz.
 
 ## Author
 
-Ammu
+Thirthi Saddala
