@@ -331,3 +331,4 @@ For example:
 ```
 
 The timer starts at **30 seconds for each question**, turns **red at 10 seconds**, and automatically moves to the next question when it reaches zero.
+
