@@ -37,7 +37,7 @@ let timeLeft = 30;
 let timer;
 
 const questionElement = document.getElementById("question");
-const optionButtons = document.querySelectorAll(".option");
+const optionsElement = document.getElementById("options");
 const nextButton = document.getElementById("next-btn");
 const quizElement = document.getElementById("quiz");
 const resultElement = document.getElementById("result");
@@ -52,15 +52,22 @@ function loadQuestion() {
     questionElement.textContent =
         (currentQuestion + 1) + ". " + current.question;
 
-    optionButtons.forEach((button, index) => {
-        button.textContent = current.options[index];
-        button.classList.remove("correct", "wrong");
-        button.disabled = false;
+    optionsElement.innerHTML = "";
 
-        button.onclick = function () {
+    current.options.forEach(function(option, index) {
+        const button = document.createElement("button");
+
+        button.textContent = option;
+        button.className = "option";
+
+        button.onclick = function() {
             selectAnswer(index);
         };
+
+        optionsElement.appendChild(button);
     });
+
+    nextButton.disabled = false;
 
     startTimer();
 }
@@ -70,7 +77,7 @@ function startTimer() {
     timerElement.textContent = "Time: " + timeLeft;
     timerElement.style.color = "black";
 
-    timer = setInterval(function () {
+    timer = setInterval(function() {
         timeLeft--;
 
         timerElement.textContent = "Time: " + timeLeft;
@@ -89,18 +96,19 @@ function startTimer() {
 function selectAnswer(selectedIndex) {
     clearInterval(timer);
 
-    const correctIndex = questions[currentQuestion].answer;
+    const current = questions[currentQuestion];
+    const buttons = document.querySelectorAll(".option");
 
-    optionButtons.forEach(function (button) {
+    buttons.forEach(function(button) {
         button.disabled = true;
     });
 
-    if (selectedIndex === correctIndex) {
-        optionButtons[selectedIndex].classList.add("correct");
+    if (selectedIndex === current.answer) {
+        buttons[selectedIndex].classList.add("correct");
         score++;
     } else {
-        optionButtons[selectedIndex].classList.add("wrong");
-        optionButtons[correctIndex].classList.add("correct");
+        buttons[selectedIndex].classList.add("wrong");
+        buttons[current.answer].classList.add("correct");
     }
 }
 
@@ -135,16 +143,7 @@ function restartQuiz() {
 
     loadQuestion();
 }
-nextButton.onclick = function () {
-    clearInterval(timer);
 
-    currentQuestion++;
-
-    if (currentQuestion < questions.length) {
-        loadQuestion();
-    } else {
-        showResult();
-    }
-};
+nextButton.onclick = nextQuestion;
 
 loadQuestion();
