@@ -135,5 +135,16 @@ function restartQuiz() {
 
     loadQuestion();
 }
+nextButton.onclick = function () {
+    clearInterval(timer);
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+        loadQuestion();
+    } else {
+        showResult();
+    }
+};
 
 loadQuestion();
